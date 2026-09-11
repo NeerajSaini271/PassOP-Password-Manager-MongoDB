@@ -12,6 +12,12 @@
   Built with React, Express, MongoDB, Tailwind CSS, and Vite.
 </p>
 
+<p align="center">
+  <a href="https://nexlockr.vercel.app"><strong>Live Demo</strong></a>
+  ·
+  <a href="https://nexlockr-api.onrender.com/api/health"><strong>API Health</strong></a>
+</p>
+
 ---
 
 ## Overview
@@ -202,15 +208,20 @@ The focused backend test suite covers:
 
 ## Deployment
 
-1. Deploy the backend first.
-2. Configure all backend environment variables.
-3. Verify the `/api/health` endpoint.
-4. Set `VITE_API_BASE_URL` to the deployed backend origin.
-5. Add the deployed frontend origin to `FRONTEND_ORIGIN`.
-6. Deploy the frontend.
-7. Verify registration, sign-in, CRUD, logout, CORS, themes, and responsive layouts.
+NexLockr is deployed with the following production services:
 
-Never commit `.env` files or production encryption keys.
+- **Frontend:** [Vercel](https://nexlockr.vercel.app)
+- **Backend API:** [Render](https://nexlockr-api.onrender.com)
+- **API health check:** [nexlockr-api.onrender.com/api/health](https://nexlockr-api.onrender.com/api/health)
+- **Database:** MongoDB Atlas
+
+The production frontend uses:
+
+```text
+VITE_API_BASE_URL=https://nexlockr-api.onrender.com
+```
+
+The Render service uses the Vercel production origin in `FRONTEND_ORIGIN`. Never commit `.env` files, database credentials, or production encryption keys.
 
 > [!IMPORTANT]
 > Keep `VAULT_ENCRYPTION_KEY` stable after deployment. Changing the key makes previously encrypted credential passwords unreadable.
