@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import { getToken, request, setToken } from "../api/client";
+import {
+  AUTH_CHANGE_EVENT,
+  TOKEN_KEY,
+  getToken,
+  request,
+  setToken,
+} from "../api/client";
 import viewIcon from "../assets/view.png";
 import hideIcon from "../assets/hide.png";
 import GlowButton from "./GlowButton";
@@ -45,6 +51,29 @@ export default function Manager({ onAuthChange }) {
   useEffect(() => {
     if (session) loadCredentials();
   }, [session, loadCredentials]);
+  useEffect(() => {
+    const syncSession = (event) => {
+      if (event.type === "storage" && event.key !== TOKEN_KEY) return;
+      const nextSession = Boolean(getToken());
+      setSession(nextSession);
+      onAuthChange(nextSession);
+      if (!nextSession) {
+        setCredentials([]);
+        setVisible({});
+        setEditingId(null);
+        setForm(emptyCredential);
+        setSearch("");
+        setError("");
+        setLoading(false);
+      }
+    };
+    addEventListener("storage", syncSession);
+    addEventListener(AUTH_CHANGE_EVENT, syncSession);
+    return () => {
+      removeEventListener("storage", syncSession);
+      removeEventListener(AUTH_CHANGE_EVENT, syncSession);
+    };
+  }, [onAuthChange]);
 
   async function submitAuth(event) {
     event.preventDefault();

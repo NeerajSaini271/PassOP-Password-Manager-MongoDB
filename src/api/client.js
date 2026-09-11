@@ -1,15 +1,26 @@
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"
 ).replace(/\/$/, "");
-const TOKEN_KEY = "nexlockr-session";
+export const TOKEN_KEY = "nexlockr-session";
+export const AUTH_CHANGE_EVENT = "nexlockr-auth-change";
+
+function migrateLegacyToken() {
+  const legacyToken = sessionStorage.getItem(TOKEN_KEY);
+  if (legacyToken && !localStorage.getItem(TOKEN_KEY)) {
+    localStorage.setItem(TOKEN_KEY, legacyToken);
+  }
+  sessionStorage.removeItem(TOKEN_KEY);
+}
 
 export function getToken() {
-  return sessionStorage.getItem(TOKEN_KEY);
+  migrateLegacyToken();
+  return localStorage.getItem(TOKEN_KEY);
 }
+
 export function setToken(token) {
-  token
-    ? sessionStorage.setItem(TOKEN_KEY, token)
-    : sessionStorage.removeItem(TOKEN_KEY);
+  if (token) localStorage.setItem(TOKEN_KEY, token);
+  else localStorage.removeItem(TOKEN_KEY);
+  dispatchEvent(new CustomEvent(AUTH_CHANGE_EVENT));
 }
 
 export async function request(path, options = {}) {

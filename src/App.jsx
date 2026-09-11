@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { getToken, request, setToken } from "./api/client";
+import {
+  AUTH_CHANGE_EVENT,
+  TOKEN_KEY,
+  getToken,
+  request,
+  setToken,
+} from "./api/client";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
 import Manager from "./components/Manager";
@@ -46,6 +52,18 @@ export default function App() {
     setPage(next);
     scrollTo({ top: 0, behavior: "smooth" });
   };
+  useEffect(() => {
+    const syncAuth = (event) => {
+      if (event.type === "storage" && event.key !== TOKEN_KEY) return;
+      setSignedIn(Boolean(getToken()));
+    };
+    addEventListener("storage", syncAuth);
+    addEventListener(AUTH_CHANGE_EVENT, syncAuth);
+    return () => {
+      removeEventListener("storage", syncAuth);
+      removeEventListener(AUTH_CHANGE_EVENT, syncAuth);
+    };
+  }, []);
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.style.colorScheme = theme;
