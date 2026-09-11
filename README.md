@@ -22,7 +22,7 @@
 
 ## Overview
 
-NexLockr is a full-stack encrypted credential vault built as a standalone application and presented in my professional portfolio.
+NexLockr is a full-stack encrypted credential vault built with React, Express, and MongoDB.
 
 > [!WARNING]
 > NexLockr demonstrates authentication, account isolation, and authenticated encryption. It has not undergone an independent security audit and should not be treated as a commercial password manager. Use only fictional demonstration credentials in the public deployment.
@@ -231,6 +231,12 @@ The Render service uses the Vercel production origin in `FRONTEND_ORIGIN`. Never
 The earlier implementation stored records without authentication or encryption in the `PassOP.passwords` collection.
 
 Clear that legacy collection after preserving only clearly fictional records. If any genuine password was ever entered, change the password at the original service.
+
+## License
+
+The source code in this repository is licensed under the [MIT License](LICENSE).
+
+The NexLockr name, logo, branding, and project screenshots are not licensed for reuse and may not be used to imply endorsement or affiliation.
 
 ## Author
 
